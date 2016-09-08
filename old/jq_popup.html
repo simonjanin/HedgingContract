@@ -1,0 +1,71 @@
+<html>
+
+<head>
+    <title>jQuery Popup Login and Contact Form</title>
+    <script src="jquery-3.1.0.min.js"></script>
+    <link rel="stylesheet" href="jq_popup.css" />
+    <script src="jq_popup.js"></script>
+</head>
+
+<body>
+    <div id="mainform">
+        <b>Onclick Popup Contact Form</b>
+        <hr/>
+        <p id="onclickHedger">Popup</p>
+        <br/>
+    </div>
+
+    <!--Contact Form -->
+    <div id="contactdiv">
+        <form class="form" action="#" id="contact">
+
+            <img src="cancel.png" class="img" id="cancel" />
+            <h3>Hedger Form</h3>
+            <hr/><br/>
+            <label>(Address) <span>*</span></label>
+            <br/>
+            <input type="text" id="name" placeholder="(Address)" /><br/>
+            <br/>
+            <label>Maturity (Int): <span>*</span></label>
+            <br/>
+            <input type="text" id="email" placeholder="Maturity" /><br/>
+            <br/>
+            <label>Threshold (Min, Max) (Int): <span>*</span></label>
+            <br/>
+            <input type="text" id="contactno tMin" placeholder="Min Threshold" /><br/>
+            <input type="text" id="contactno tMax" placeholder="Max Threshold" /><br/>
+            <br/>
+            <label>Value (Int):</label>
+            <br/>
+            <textarea id="message" placeholder="Value (Qty)"></textarea><br/>
+            <br/>
+            <input type="button" id="send" value="Send" />
+            <input type="button" id="cancel" value="Cancel" />
+            <br/>
+        </form>
+    </div>
+
+    <!--Login Form -->
+    <!--
+<div id="logindiv">
+<form class="form" action="#" id="login">
+<img src="images/button_cancel.png" class="img" id="cancel"/>
+<h3>Login Form</h3>
+<hr/><br/>
+<label>Username : </label>
+<br/>
+<input type="text" id="username" placeholder="Ex -john123"/><br/>
+<br/>
+<label>password : </label>
+<br/>
+<input type="text" id="password" placeholder="************"/><br/>
+<br/>
+<input type="button" id="loginbtn" value="Login"/>
+<input type="button" id="cancel" value="Cancel"/>
+<br/>
+</form>
+</div>
+-->
+</body>
+
+</html>

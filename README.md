@@ -7,3 +7,14 @@ Its purpose is to match buyers of insurance (the hedgers) with the sellers of in
 
 The code is contained in hedgeContract.sol, here are the main functions:
 
+* function createOffer(uint T, uint minThreshold, uint maxThreshold)
+* function takeOffer(address hedger)
+* function refund(address hedger)
+
+## The team
+
+This project was created by:
+
+* Simon Janin
+* Salomon Faure
+* Alex Roque

@@ -99,29 +99,42 @@ contract HedgerContract is usingOraclize {
 	function __callback(bytes32 myid, string result, bytes proof) {
 		if (msg.sender != oraclize_cbAddress()) throw;
 		
-		USDETH = parseInt(result,6);
+		//USDETH = parseInt(result,6);
 		
 	}
 	      
 	function update() {
+		/*
         bytes memory to = new bytes(10);
         bytes memory from_bytes = bytes(bytes32ToString(uintToBytes(timestamp)));
     
         oraclize_query("URL", strConcat("json(https://www.cryptocompare.com/api/data/pricehistorical?fsym=ETH&tsyms=USD&ts=", string(copyBytes(from_bytes, 0, 10, to, 0)), ").Data.0.Price"));
+        */
 	}
 	
 	function getPrice(uint timestamp) returns (uint) {
-	        bytes memory to = new bytes(10);
-	        bytes memory from_bytes = bytes(bytes32ToString(uintToBytes(timestamp)));
-	    
-	        bytes32 result = oraclize_query("URL", strConcat("json(https://www.cryptocompare.com/api/data/pricehistorical?fsym=ETH&tsyms=USD&ts=", string(copyBytes(from_bytes, 0, 10, to, 0)), ").Data.0.Price"));
-	
-	        
-	        uint res = parseInt(bytes32ToString(result), 6);
-	
-	        //Print(bytes32ToString(uintToBytes(res)));
-		
-		return res;
+		/*
+        bytes memory to = new bytes(10);
+        bytes memory from_bytes = bytes(bytes32ToString(uintToBytes(timestamp)));
+    
+        bytes32 result = oraclize_query("URL", strConcat("json(https://www.cryptocompare.com/api/data/pricehistorical?fsym=ETH&tsyms=USD&ts=", string(copyBytes(from_bytes, 0, 10, to, 0)), ").Data.0.Price"));
+
+        
+        uint res = parseInt(bytes32ToString(result), 6);
+        
+        return res;
+        */
+        
+        // FOR DEMO PURPOSES, WE SET THE PRICE SO WE HAVE A LARGE ENOUGH FLUCTUATION
+        if (timestamp == block.timestamp) {
+        	return 10500;
+        } else {
+        	return 11000;
+        }
+        
+        
+
+        //Print(bytes32ToString(uintToBytes(res)));
 	}
 	
 	// multiplicity index: 1000 (pips)

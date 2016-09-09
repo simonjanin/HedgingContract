@@ -18,3 +18,7 @@ This project was created by:
 * Simon Janin
 * Salomon Faure
 * Alex Roque
+
+## Presentation
+
+You can look at our presentation at this address: https://docs.google.com/presentation/d/1Q36Fh505VYGxrpxLy9BJ1I4s8HdPt8yvEMSWE6o4RWQ/edit?usp=sharing

@@ -4,6 +4,7 @@ import "lib/oraclizeAPI.sol";
 contract HedgerContract is usingOraclize {
 	event Print(string str);
 	address owner;
+	uint public USDETH;
 	
 	function uintToBytes(uint v) constant returns (bytes32 ret) {
 		if (v == 0) {
@@ -98,30 +99,17 @@ contract HedgerContract is usingOraclize {
 	          
 	function __callback(bytes32 myid, string result, bytes proof) {
 		if (msg.sender != oraclize_cbAddress()) throw;
-		
 		USDETH = parseInt(result,6);
-		
 	}
 	      
 	function update() {
-        bytes memory to = new bytes(10);
-        bytes memory from_bytes = bytes(bytes32ToString(uintToBytes(timestamp)));
-    
-        oraclize_query("URL", strConcat("json(https://www.cryptocompare.com/api/data/pricehistorical?fsym=ETH&tsyms=USD&ts=", string(copyBytes(from_bytes, 0, 10, to, 0)), ").Data.0.Price"));
-	}
-	
-	function getPrice(uint timestamp) returns (uint) {
-	        bytes memory to = new bytes(10);
-	        bytes memory from_bytes = bytes(bytes32ToString(uintToBytes(timestamp)));
-	    
-	        bytes32 result = oraclize_query("URL", strConcat("json(https://www.cryptocompare.com/api/data/pricehistorical?fsym=ETH&tsyms=USD&ts=", string(copyBytes(from_bytes, 0, 10, to, 0)), ").Data.0.Price"));
-	
-	        
-	        uint res = parseInt(bytes32ToString(result), 6);
-	
-	        //Print(bytes32ToString(uintToBytes(res)));
+		// uintToBytes(block.timestamp)
+		//bytes32 str1 = bytes32ToString(uintToBytes(block.timestamp));
+		//string memory from_bytes = bytes32ToString(uintToBytes(block.timestamp));
+			
+		//Myevent(string(copyBytes(from_bytes, 0, 10, to, 0)));
 		
-		return res;
+		//Myevent(strConcat("json(https://www.cryptocompare.com/api/data/pricehistorical?fsym=ETH&tsyms=USD&ts=", string(copyBytes(from_bytes, 0, 10, to, 0)), ").Data.0.Price"));
 	}
 	
 	// multiplicity index: 1000 (pips)
@@ -136,7 +124,6 @@ contract HedgerContract is usingOraclize {
 		address speculator;
 		uint speculatorAmount;
 		uint blockTimestamp; // time at which the speculator accepts the contract <!>
-		uint endingPrice;
 	}
 	
 	// address => Offer
@@ -150,7 +137,7 @@ contract HedgerContract is usingOraclize {
 			
 			// once done, add we create newOffer and add [address, newOffer] to the offerers mapping
 			//Myevent(getPriceAtomic());
-			offerers[msg.sender] = Offer(T, getPrice(block.timestamp), minThreshold, maxThreshold, msg.value, 0x0, 0, 0, 0); // make args dynamic
+			offerers[msg.sender] = Offer(T, 10500, minThreshold, maxThreshold, msg.value, 0x0, 0, 0); // make args dynamic
 		}
 	}
 	        
@@ -158,10 +145,13 @@ contract HedgerContract is usingOraclize {
 		// check amount is enough [ ]
 		uint w = offerers[hedger].hedgerAmount;
 		uint thresholdMIN = offerers[hedger].thresholdMIN;
+		//Print(w);
+		//Print(thresholdMIN);
+		Print("outside if");
 		
 		if (w/thresholdMIN - w/1000 <= msg.value/1000) { // TODO: how to compute gas price?? Add maxgas?
 			// check parameters are consistent [ ]
-
+			Print("inside if");
 			offerers[hedger].speculator = msg.sender;
 			offerers[hedger].speculatorAmount = msg.value; // how to get money from him?
 			offerers[hedger].blockTimestamp = block.timestamp; // how to get money from him?
@@ -172,30 +162,27 @@ contract HedgerContract is usingOraclize {
 	function refund(address hedger) {
 		// once the hedge has reached maturity, each participant can call this function to recover their funds
 		// FUTURE FUNCTIONALITY: if some funds are not locked, the hedger can retrieve the non-locked funds (so we need two variables: locked_funds and nonlocked_funds)
-		if (endTimestamp <= block.timestamp) { // maturity has been reached
-			uint endTimestamp = offerers[hedger].blockTimestamp + offerers[hedger].maturity;
-			
-			if (offerers[hedger].endingPrice == 0)
-				offerers[hedger].endingPrice = getPrice(endTimestamp);
-			
-			uint w = offerers[hedger].hedgerAmount; // hedger amount
-			uint ws = offerers[hedger].speculatorAmount; // speculator amount
-			uint thresholdMAX = offerers[hedger].thresholdMAX;
-			uint thresholdMIN = offerers[hedger].thresholdMIN;
-	
-			uint P0 = offerers[hedger].startingPrice;
-			uint PT = offerers[hedger].endingPrice;
-			
-			uint hedger_lockedFunds;
-			uint hedger_unlockedFunds;
-			uint speculator_lockedFunds;
-			uint speculator_unlockedFunds;
-			
-			if (offerers[hedger].speculator == 0x0) { // if offer not taken yet, then destroy and refund
-				// refund
-				// destroy offer
-			}
-
+		
+		uint w = offerers[hedger].hedgerAmount; // hedger amount
+		uint ws = offerers[hedger].speculatorAmount; // speculator amount
+		uint thresholdMAX = offerers[hedger].thresholdMAX;
+		uint thresholdMIN = offerers[hedger].thresholdMIN;
+		uint P0 = offerers[hedger].startingPrice;
+		uint PT = 9000; // TODO: query Oraclize to get price at timestamp offerers[hedger].blockTimestamp (speculator's acceptation of offer)
+		
+		
+		uint hedger_lockedFunds;
+		uint hedger_unlockedFunds;
+		uint speculator_lockedFunds;
+		uint speculator_unlockedFunds;
+		
+		if (offerers[hedger].speculator == 0x0) { // if offer not taken yet, then destroy and refund
+			// TODO
+			// refund
+			// destroy offer
+		}
+		
+		if (offerers[hedger].blockTimestamp + offerers[hedger].maturity <= block.timestamp) { // maturity has been reached
 			if (PT >= P0) { //w  w) { // PT >= P0
 					hedger_lockedFunds = 0;
 					hedger_unlockedFunds = w - min(w - w * P0 / PT, w - 1000 * w / thresholdMAX);
